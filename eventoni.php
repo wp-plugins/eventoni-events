@@ -2,14 +2,14 @@
 /**
  * @package eventoni
  * @author Benjamin Mock
- * @version 2.0
+ * @version 2.1
  */
 /*
  Plugin Name: eventoni
  Plugin URI: http://eventoni.com/
  Description: Event-Suche
  Author: Benjamin Mock
- Version: 2.0
+ Version: 2.1
  Author URI: http://benjaminmock.de/
  */
 
@@ -28,7 +28,7 @@ function eventoni_activate() {
 	$customization = $wpdb->get_results("SELECT option_value FROM $wpdb->options WHERE option_name = 'eventoni_options' LIMIT 1");
 	// pruefen ob Einstellungen bereits gespeichert wurden
 	if($wpdb->num_rows < 1) {
-		$customization_string = 'a:9:{s:13:"constraint_id";s:0:"";s:8:"bg_color";s:7:"#121E29";s:9:"placement";s:7:"sidebar";s:8:"show_map";s:4:"true";s:12:"event_search";s:4:"true";s:13:"event_suggest";s:4:"true";s:11:"geolocation";s:0:"";s:16:"eventoni_api_key";s:0:"";s:18:"googlemaps_api_key";s:0:"";}';
+		$customization_string = 'a:9:{s:8:"bg_color";s:7:"#121E29";s:9:"placement";s:7:"sidebar";s:8:"show_map";s:4:"true";s:12:"event_search";s:4:"true";s:13:"event_suggest";s:4:"true";s:11:"geolocation";s:0:"";s:16:"eventoni_api_key";s:0:"";s:18:"googlemaps_api_key";s:0:"";}';
 		$wpdb->query("INSERT INTO $wpdb->options (blog_id, option_name, option_value, autoload) VALUES ('0', 'eventoni_options', '$customization_string', 'no')");
 	}
 }
@@ -350,16 +350,12 @@ function eventoni_fetch($get_fields = '', $raw = false, $events_array = false )
 	$options = get_option('eventoni_options');
 	$ch = curl_init();
 
-	$constraint_id = '';
-	if( $options['constraint_id'] != ''){
-		$constraint_id = '&q='.$options['constraint_id'];
-	}
 	// set url
 	if( $events_array ){
 		$xml_name = implode('-',$events_array);
 		curl_setopt($ch, CURLOPT_URL, "http://api.eventoni.com/v1/events/$xml_name.xml?api_key=".$options['eventoni_api_key']);
 	} else {
-		curl_setopt($ch, CURLOPT_URL, "http://api.eventoni.com/v1/search.xml?api_key=".$options['eventoni_api_key'].$constraint_id.$get_fields);
+		curl_setopt($ch, CURLOPT_URL, "http://api.eventoni.com/v1/search.xml?api_key=".$options['eventoni_api_key'].$get_fields);
 	}
 
 	//return the transfer as a string
@@ -425,12 +421,6 @@ function eventoni_settings_page() {
 	settings_fields( 'eventoni_options' );
 	?>
 <table class="form-table">
-	<tr valign="top">
-		<th scope="row">Constraint id</th>
-		<td><input type="text" name="eventoni_options[constraint_id]"
-			value="<?php echo $options['constraint_id']; ?>" /></td>
-	</tr>
-
 	<tr valign="top">
 		<th scope="row">Eventoni API key</th>
 		<td><input type="text" name="eventoni_options[eventoni_api_key]"
