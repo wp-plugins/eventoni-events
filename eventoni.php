@@ -2,19 +2,16 @@
 /**
  * @package eventoni
  * @author Benjamin Mock
- * @version 2.1
+ * @version 2.2
  */
 /*
  Plugin Name: eventoni
  Plugin URI: http://eventoni.com/
  Description: Event-Suche
  Author: Benjamin Mock
- Version: 2.1
+ Version: 2.2
  Author URI: http://benjaminmock.de/
  */
-
-error_reporting(E_ALL);
-ini_set('display_errors', 'On');
 
 $eventoni_visitor_location = false;
 
@@ -58,7 +55,7 @@ function eventoni_init() {
 		wp_register_script('google_maps', 'http://www.google.com/jsapi?key='.$options['googlemaps_api_key'], false, '1.0', true);
 		wp_enqueue_script('google_maps');
 
-		wp_enqueue_script('my_script', get_bloginfo('wpurl').'/wp-content/plugins/eventoni/js/eventoni.js', array('jquery','google_maps'), '1.0', true);
+		wp_enqueue_script('my_script', get_bloginfo('wpurl').'/wp-content/plugins/eventoni-events/js/eventoni.js', array('jquery','google_maps'), '1.0', true);
 	}
 }
 add_action('init', 'eventoni_init');
@@ -72,7 +69,7 @@ function eventoni_add_customization_to_header() {
 	$options = get_option('eventoni_options');
 	$background_color = $options['bg_color'];
 
-	echo '<link type="text/css" rel="stylesheet" href="'.get_bloginfo('wpurl').'/wp-content/plugins/eventoni/css/eventoni_style.css.php?bgc='.urlencode($background_color).'"/>';
+	echo '<link type="text/css" rel="stylesheet" href="'.get_bloginfo('wpurl').'/wp-content/plugins/eventoni-events/css/eventoni_style.css.php?bgc='.urlencode($background_color).'"/>';
 	$customization = $wpdb->get_results("SELECT option_value FROM $wpdb->options WHERE option_name = 'eventoni_options' LIMIT 1");
 	// SACK-Bibliothek fuer Ajax-Request
 	wp_print_scripts( array( 'sack' ));
@@ -80,7 +77,7 @@ function eventoni_add_customization_to_header() {
 <script type="text/javascript">
 //<![CDATA[
 	eventoni_ajax_url   = '<?php bloginfo( 'wpurl' ); ?>/wp-admin/admin-ajax.php';
-	eventoni_plugin_url = '<?php bloginfo( 'wpurl' );?>/wp-content/plugins/eventoni/';
+	eventoni_plugin_url = '<?php bloginfo( 'wpurl' );?>/wp-content/plugins/eventoni-events/';
 	eventoni_vistor_location  = '';
 //]]>
 </script>
@@ -209,7 +206,7 @@ function eventoni_add_searchform()
 	<input tabindex=12 style="width: 90%; margin: 0 auto;" type="text" id="eventoni_wo" name="wo" value="<?php echo get_query_var('wo');?>" />
 </div>
 <input tabindex=14 type="image" style="margin-top: 10px;"
-	src="<?php echo get_bloginfo('wpurl'); ?>/wp-content/plugins/eventoni/img/search-button.png"
+	src="<?php echo get_bloginfo('wpurl'); ?>/wp-content/plugins/eventoni-events/img/search-button.png"
 	name="submit" value="submit">
 	<input type="hidden" name="eventoni_page" id="eventoni_page" value="1" autocomplete="off"/>
 	<input type="hidden" name="eventoni_subpage" id="eventoni_subpage" value="0" autocomplete="off"/>
@@ -244,12 +241,12 @@ function eventoni_add_searchform()
 					</div>
 					<div style="float:right">
 						<a class="facebook_link" href="#" target="_blank">
-							<img src="<?php echo get_bloginfo('wpurl').'/wp-content/plugins/eventoni/img/facebook.png'; ?>" />
+							<img src="<?php echo get_bloginfo('wpurl').'/wp-content/plugins/eventoni-events/img/facebook.png'; ?>" />
 						</a>
 					</div>
 					<div style="float:right">
 						<a class="twitter_link" href="TODO" target="_blank">
-							<img src="<?php echo get_bloginfo('wpurl').'/wp-content/plugins/eventoni/img/twitter.png'; ?>" />
+							<img src="<?php echo get_bloginfo('wpurl').'/wp-content/plugins/eventoni-events/img/twitter.png'; ?>" />
 						</a>
 					</div>
 				</div>
@@ -265,7 +262,7 @@ function eventoni_add_searchform()
 	if( isset($options['show_map'])){
 		echo '<div id="eventoni_map" style="width:100%; height:200px;"></div>';
 	}
-	echo '<div style="float:right"><small style="color:#ffffff;font-size:10px;">powered by</small> <a href="http://www.eventoni.de/" title="Eventoni Startseite"><img alt="Eventoni Veranstaltungen und Termine in Deiner Region" src="'.get_bloginfo('wpurl').'/wp-content/plugins/eventoni/img/logo.png" /></a></div>';
+	echo '<div style="float:right"><small style="color:#ffffff;font-size:10px;">powered by</small> <a href="http://www.eventoni.de/" title="Eventoni Startseite"><img alt="Eventoni Veranstaltungen und Termine in Deiner Region" src="'.get_bloginfo('wpurl').'/wp-content/plugins/eventoni-events/img/logo.png" /></a></div>';
 	echo '</div>';
 }
 if( $options['placement'] == 'sidebar' ){
@@ -290,7 +287,7 @@ function add_eventoni_to_search()
 			return;
 		}
 		echo '<div class="events-container">';
-		echo '<img src="'.get_bloginfo('wpurl').'/wp-content/plugins/eventoni/img/logo.png" />';
+		echo '<img src="'.get_bloginfo('wpurl').'/wp-content/plugins/eventoni-events/img/logo.png" />';
 		$counter = 0;
 		foreach($results['xml'] as $event)
 		{
@@ -322,11 +319,11 @@ function add_eventoni_to_search()
 			echo '</a>';
 			echo '	 <div class="event-item-content">';
 			echo '		<div class="event-item-content-date">'.date( "d.m.Y", $datetime ).', '.date( "H:i \U\h\\r", $datetime ).'</div>';
-			echo '		<div class="event-item-content-city"><img src="'.get_bloginfo('wpurl').'/wp-content/plugins/eventoni/img/my_location.png"/> '.$event->location->city.'</div>';
+			echo '		<div class="event-item-content-city"><img src="'.get_bloginfo('wpurl').'/wp-content/plugins/eventoni-events/img/my_location.png"/> '.$event->location->city.'</div>';
 			echo '	 </div>';
 			echo '	 <div class="event-item-content-name"><b><a class="event-item-link" href="'.$event->permalink.'">'.$event->title.'</a></b></div>';
-			echo '	 <div style="float:right;"><a class="facebook_link" href="http://www.facebook.com/sharer.php?u='.$event->permalink.'&t=Dieses Event musst Du gesehen haben: " target="_blank"><img src="'.get_bloginfo('wpurl').'/wp-content/plugins/eventoni/img/facebook.png" /></a></div>';
-			echo '	 <div style="float:right;"><a class="twitter_link" href="http://twitter.com/home?status=Dieses Event musst Du gesehen haben: '.$event->permalink.'" target="_blank"><img src="'.get_bloginfo('wpurl').'/wp-content/plugins/eventoni/img/twitter.png" /></a></div>';
+			echo '	 <div style="float:right;"><a class="facebook_link" href="http://www.facebook.com/sharer.php?u='.$event->permalink.'&t=Dieses Event musst Du gesehen haben: " target="_blank"><img src="'.get_bloginfo('wpurl').'/wp-content/plugins/eventoni-events/img/facebook.png" /></a></div>';
+			echo '	 <div style="float:right;"><a class="twitter_link" href="http://twitter.com/home?status=Dieses Event musst Du gesehen haben: '.$event->permalink.'" target="_blank"><img src="'.get_bloginfo('wpurl').'/wp-content/plugins/eventoni-events/img/twitter.png" /></a></div>';
 			echo ' </div>';
 			if( $counter >= 3 ){
 				break;
@@ -531,16 +528,16 @@ function add_scripts_to_admin()
 	wp_enqueue_script('jquery');
 
 	// Eigene Javascripts
-	echo '<script src="'.get_bloginfo('wpurl').'/wp-content/plugins/eventoni/js/eventoni_admin.js"></script>';
+	echo '<script src="'.get_bloginfo('wpurl').'/wp-content/plugins/eventoni-events/js/eventoni_admin.js"></script>';
 
 	// CSS
-	echo '<link type="text/css" rel="stylesheet" href="'.get_bloginfo('wpurl').'/wp-content/plugins/eventoni/css/eventoni_style.css.php"/>';
+	echo '<link type="text/css" rel="stylesheet" href="'.get_bloginfo('wpurl').'/wp-content/plugins/eventoni-events/css/eventoni_style.css.php"/>';
 
 	// URLs für Wordpress Ajax und Plug-In Location als Javascript Variablen hinterlegen
 	?> <script type="text/javascript">
 //<![CDATA[
 	eventoni_ajax_url   = '<?php bloginfo( 'wpurl' ); ?>/wp-admin/admin-ajax.php';
-	eventoni_plugin_url = '<?php bloginfo( 'wpurl' );?>/wp-content/plugins/eventoni/';
+	eventoni_plugin_url = '<?php bloginfo( 'wpurl' );?>/wp-content/plugins/eventoni-events/';
 //]]>
 </script> <?php
 }
@@ -793,7 +790,7 @@ function insert_events( $events ){
 	// HTML Code erstellen
 	$result = '';
 	$result.= '<div class="events-container">';
-	$result.= '<img src="'.get_bloginfo('wpurl').'/wp-content/plugins/eventoni/img/logo.png" />';
+	$result.= '<img src="'.get_bloginfo('wpurl').'/wp-content/plugins/eventoni-events/img/logo.png" />';
 
 	// Jedes Event durchlaufen
 	foreach($results['xml'] as $event)
@@ -828,11 +825,11 @@ function insert_events( $events ){
 		$result.= '</a>';
 		$result.= '	 <div class="event-item-content">';
 		$result.= '		<div class="event-item-content-date">'.date( "d.m.Y", $datetime ).', '.date( "H:i \U\h\\r", $datetime ).'</div>';
-		$result.= '		<div class="event-item-content-city"><img src="'.get_bloginfo('wpurl').'/wp-content/plugins/eventoni/img/my_location.png"/> '.$event->location->city.'</div>';
+		$result.= '		<div class="event-item-content-city"><img src="'.get_bloginfo('wpurl').'/wp-content/plugins/eventoni-events/img/my_location.png"/> '.$event->location->city.'</div>';
 		$result.= '	 </div>';
 		$result.= '	 <div class="event-item-content-name"><b><a class="event-item-link" href="'.$event->permalink.'">'.$event->title.'</a></b></div>';
-		$result.= '<div style="float:right"><a class="facebook_link" href="http://www.facebook.com/sharer.php?u='.$event->permalink.'&t=Dieses Event musst Du gesehen haben: " target="_blank"><img src="'.get_bloginfo('wpurl').'/wp-content/plugins/eventoni/img/facebook.png" /></a></div>';
-		$result.= '<div style="float:right"><a class="twitter_link" href="http://twitter.com/home?status=Dieses Event musst Du gesehen haben: '.$event->permalink.'" target="_blank"><img src="'.get_bloginfo('wpurl').'/wp-content/plugins/eventoni/img/twitter.png" /></a></div>';
+		$result.= '<div style="float:right"><a class="facebook_link" href="http://www.facebook.com/sharer.php?u='.$event->permalink.'&t=Dieses Event musst Du gesehen haben: " target="_blank"><img src="'.get_bloginfo('wpurl').'/wp-content/plugins/eventoni-events/img/facebook.png" /></a></div>';
+		$result.= '<div style="float:right"><a class="twitter_link" href="http://twitter.com/home?status=Dieses Event musst Du gesehen haben: '.$event->permalink.'" target="_blank"><img src="'.get_bloginfo('wpurl').'/wp-content/plugins/eventoni-events/img/twitter.png" /></a></div>';
 		$result.= ' </div>';
 
 	}

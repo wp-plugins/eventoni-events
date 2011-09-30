@@ -3,8 +3,8 @@ Contributors: Eventoni
 Donate link: http://www.eventoni.de/
 Tags: events, calendar, Kalender, Termine, Veranstaltungen
 Requires at least: 2.0.2
-Tested up to: 3.0.1
-Stable tag: 2.1
+Tested up to: 3.2.1
+Stable tag: 2.2
 
 Displays an event calendar with events from Eventoni.de, a constantly updated search engine for events in Germany.
 
@@ -30,3 +30,4 @@ wordpress installation
 * The Eventoni plugin configuration is accessible from your wordpress menu. Insert the API key you retrieved before into the input field "API key".
 
 Your plugin is now ready to go.
+
