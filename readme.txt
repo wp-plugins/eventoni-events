@@ -30,3 +30,4 @@ wordpress installation
 * The Eventoni plugin configuration is accessible from your wordpress menu. Insert the API key you retrieved before into the input field "API key".
 
 Your plugin is now ready to go.
+
