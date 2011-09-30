@@ -3,8 +3,8 @@ Contributors: Eventoni
 Donate link: http://www.eventoni.de/
 Tags: events, calendar, Kalender, Termine, Veranstaltungen
 Requires at least: 2.0.2
-Tested up to: 3.0.1
-Stable tag: 2.1
+Tested up to: 3.2.1
+Stable tag: 2.2
 
 Displays an event calendar with events from Eventoni.de, a constantly updated search engine for events in Germany.
 

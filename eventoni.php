@@ -2,19 +2,16 @@
 /**
  * @package eventoni
  * @author Benjamin Mock
- * @version 2.1
+ * @version 2.2
  */
 /*
  Plugin Name: eventoni
  Plugin URI: http://eventoni.com/
  Description: Event-Suche
  Author: Benjamin Mock
- Version: 2.1
+ Version: 2.2
  Author URI: http://benjaminmock.de/
  */
-
-error_reporting(E_ALL);
-ini_set('display_errors', 'On');
 
 $eventoni_visitor_location = false;
 
